@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using AjaxCrud.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AjaxCrud.Data
@@ -9,6 +10,6 @@ namespace AjaxCrud.Data
             : base(options)
         {
         }
-
+        public DbSet<Employee> Employees { get; set; }
     }
 }

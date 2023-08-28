@@ -6,3 +6,27 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+
+<table class="table table-bordered text-center">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Salary</th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody class="text-center" id="table">
+        <tr></tr>
+    </tbody>
+</table>
+
+
+<div>
+    <input type="hidden" id="urlEmployeeData"  value="@Url.Action("EmployeeList", "Home") "/>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/js/custom.js"></script>
