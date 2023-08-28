@@ -32,7 +32,21 @@ namespace AjaxCrud.Controllers
             return new JsonResult(data);
         }
 
-
+        //add new employee
+        [HttpPost]
+        public JsonResult AddEmployee(Employee employee) 
+        {
+            var emp = new Employee()
+            {
+                Name = employee.Name,
+                City = employee.City,
+                State = employee.State,
+                Salary = employee.Salary
+            };
+            _context.Employees.Add(emp);
+            _context.SaveChanges();
+            return new JsonResult("Data is saved");
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

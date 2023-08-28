@@ -37,7 +37,7 @@ function showEmployeeData() {
                 object += '<td>' + item.city + '</td>';
                 object += '<td>' + item.state + '</td>';
                 object += '<td>' + item.salary + '</td>';
-                object += '<td> <a class="btn btn-primary">Edit</a> || <a class="btn btn-danger"> Delete</a>  </td>';
+                object += '<td> <a class="btn btn-primary m-1">Edit</a> <a class="btn btn-danger m-1"> Delete</a>  </td>';
                 object += '</tr>';
             });
             //load that detail to table body so we use id 
@@ -49,3 +49,50 @@ function showEmployeeData() {
         }
     });
 };  
+
+//Add Employee Button Code to show form or madal of add new employee
+$('#btnAddEmployee').click(function () {
+    $('#EmployeeMadal').modal('show');
+});
+
+//function of hide add new employee form or madal
+function HideModalPopup() {
+    $('#EmployeeMadal').modal('hide');
+}
+
+//function of clear text box of add new employee form or madal
+function ClearTextBox() {
+    $('#Name').val('');
+    $('#City').val('');
+    $('#State').val('');
+    $('#Salary').val('');
+}
+
+// save button code to add employee record into database
+function SaveEmployee() {
+    debugger
+    /*create a object and store employee information*/
+    var objData = {
+        Name : $('#Name').val(),
+        City : $('#City').val(),
+        State : $('#State').val(),
+        Salary : $('#Salary').val()
+    }
+    //ajax call to add
+    $.ajax({
+        url: '/Home/AddEmployee',
+        type: 'Post',
+        data: objData,
+        contentType: 'application/x-www-form-urlencoded;charset=utf-8;',   //our controller receive data through http(server) //with this url we data is go to controller otherwise store null value
+        dataType: 'json',
+        success: function () {
+            alert('Data Saved');
+            ClearTextBox();
+            showEmployeeData();
+            HideModalPopup();
+        },
+        error: function () {
+            alert('Data cannot save');
+        }
+    })
+}
