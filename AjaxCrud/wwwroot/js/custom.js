@@ -5,7 +5,7 @@
 
 //Show Employee data from database throw ajax call
 function showEmployeeData() {
-    debugger //for debugging code
+    /*debugger //for debugging code*/
 
     ////second way to store url
     //var url = '/Home/EmployeeList';
@@ -37,7 +37,7 @@ function showEmployeeData() {
                 object += '<td>' + item.city + '</td>';
                 object += '<td>' + item.state + '</td>';
                 object += '<td>' + item.salary + '</td>';
-                object += '<td> <a class="btn btn-primary m-1">Edit</a> <a class="btn btn-danger m-1"> Delete</a>  </td>';
+                object += '<td> <a class="btn btn-primary m-1" onClick="Edit(' + item.id + ')">Edit</a> <a class="btn btn-danger m-1" onClick="Delete(' + item.id + ')"> Delete</a>  </td>';
                 object += '</tr>';
             });
             //load that detail to table body so we use id 
@@ -52,7 +52,13 @@ function showEmployeeData() {
 
 //Add Employee Button Code to show form or madal of add new employee
 $('#btnAddEmployee').click(function () {
+    ClearTextBox();
     $('#EmployeeMadal').modal('show');
+    $('#empHeading').text('Add New Employee');
+    $('#empid').hide();
+    $('#SaveEmployee').css('display', 'block');
+    $('#UpdateEmployee').css('display', 'none');
+
 });
 
 //function of hide add new employee form or madal
@@ -66,11 +72,12 @@ function ClearTextBox() {
     $('#City').val('');
     $('#State').val('');
     $('#Salary').val('');
+    $('#Id').val('');
 }
 
 // save button code to add employee record into database
 function SaveEmployee() {
-    debugger
+    
     /*create a object and store employee information*/
     var objData = {
         Name : $('#Name').val(),
@@ -94,5 +101,87 @@ function SaveEmployee() {
         error: function () {
             alert('Data cannot save');
         }
-    })
+    });
+}
+
+//delete function 
+function Delete(id) {
+    debugger
+    if (confirm('Are you sure, you want to delete this record?')) {
+        $.ajax({
+            url: '/Home/Delete?id=' + id,
+            success: function () {
+                alert('Record Deleted');
+                showEmployeeData();
+            },
+            error: function () {
+                alert('Data can not be deleted');
+            }
+        });
+    }
+}
+
+
+//edit employee function use for popup the record from database and display on form
+function Edit(id) { 
+    $.ajax({
+        url: '/Home/Edit?id=' + id,
+        type: 'Get',
+        contentType: 'application/x-www-form-urlencoded;charset-utf-8',
+        dataType: 'json',
+
+        /*in response we get data of employee that is equal to id*/
+        success: function (response) {
+            /*first popup the modal/page/form*/
+            $('#EmployeeMadal').modal('show');
+            /*display response data that is fetch from database and show on form*/
+            $('#Id').val(response.id);
+            $('#Name').val(response.name);
+            $('#City').val(response.city);
+            $('#State').val(response.state);
+            $('#Salary').val(response.salary);
+
+            /*two way to hide save button and display update button*/
+            /*First way through CSS*/
+            $('#SaveEmployee').css('display', 'none');
+            $('#UpdateEmployee').css('display', 'block');
+            $('#empid').show();
+            $('#empHeading').text('Update Record');
+            /*second way to hide and display button*/
+            //$('#SaveEmployee').hide();
+            //$('#UpdateEmployee').show();
+        },
+        error: function () {
+            alert('Data not Found');
+        }
+    });
+}
+
+//update employee update data that show
+function UpdateEmployee() {
+    /*create a object and store employee information*/
+    var objData = {
+        Id: $('#Id').val(),
+        Name: $('#Name').val(),
+        City: $('#City').val(),
+        State: $('#State').val(),
+        Salary: $('#Salary').val()
+    }
+    $.ajax({
+        url: '/Home/Update',
+        type: 'Post',
+        data: objData,
+        contentType: 'application/x-www-form-urlencoded;charset-utf-8',   //our controller receive data through http(server) //with this url we data is go to controller otherwise store null value
+        dataType: 'json',
+        success: function () {
+            alert('Data Saved');
+            ClearTextBox();
+            showEmployeeData();
+            HideModalPopup();
+        },
+        error: function () {
+            alert('Data cannot save');
+        }
+        
+    });
 }

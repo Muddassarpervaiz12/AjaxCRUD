@@ -48,6 +48,35 @@ namespace AjaxCrud.Controllers
             return new JsonResult("Data is saved");
         }
 
+
+        //delete employee data
+        public JsonResult Delete(int id)
+        {
+            var obj = _context.Employees.Where(u => u.Id == id).FirstOrDefault();
+            _context.Employees.Remove(obj);
+            _context.SaveChanges();
+            return new JsonResult("Data Deleted");
+        }
+
+
+
+        //get employee data base on id and return data to form
+        public JsonResult Edit(int id)
+        {
+            var obj = _context.Employees.Where(u=>u.Id==id).FirstOrDefault();
+            return new JsonResult(obj);
+        }
+
+
+        //update employee record
+        [HttpPost]
+        public JsonResult Update(Employee employee)
+        {
+            _context.Employees.Update(employee);
+            _context.SaveChanges();
+            return new JsonResult("update uccessfully");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
